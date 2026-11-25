@@ -1,0 +1,11 @@
+@extends('layouts.app')
+@section('title','Source library')
+@section('crumb','Source library')
+@section('content')
+<div class="page-heading"><div><div class="eyebrow">ADMINISTRATION</div><h1>Comparison source library</h1><p>Manage approved texts used by the similarity checker.</p></div></div>
+<div class="admin-grid">
+<form class="panel source-form" method="POST" action="{{ route('admin.sources.store') }}">@csrf<h2>Add comparison source</h2><label class="field-label">Source title</label><input class="text-input" name="title" required maxlength="180" placeholder="Publication or document title"><label class="field-label mt-16">Source type</label><select class="text-input" name="source_type"><option value="institutional">Institutional</option><option value="publication">Publication</option><option value="web">Web source</option></select><label class="field-label mt-16">Source URL (optional)</label><input class="text-input" name="url" type="url" placeholder="https://..."><label class="field-label mt-16">Full source text</label><textarea class="text-input source-textarea" name="content" required minlength="30" placeholder="Paste approved source text here..."></textarea><button class="btn btn-primary mt-16">＋ Add source</button></form>
+<div class="panel source-list"><div class="panel-heading"><div><h2>Available sources</h2><p>{{ $sources->total() }} sources in library</p></div></div>
+@forelse($sources as $source)<div class="source-row"><div><strong>{{ $source->title }}</strong><small>{{ ucfirst($source->source_type) }} · {{ $source->created_at->format('d M Y') }}</small></div><div class="source-actions"><form method="POST" action="{{ route('admin.sources.toggle',$source) }}">@csrf @method('PATCH')<button class="tiny-btn">{{ $source->is_active ? 'Active' : 'Inactive' }}</button></form><form method="POST" action="{{ route('admin.sources.destroy',$source) }}" onsubmit="return confirm('Delete this source?')">@csrf @method('DELETE')<button class="tiny-btn danger">Delete</button></form></div></div>@empty<p class="muted-pad">No sources yet. Add approved source texts to enable matching.</p>@endforelse
+<div class="pagination-wrap">{{ $sources->links() }}</div></div></div>
+@endsection
