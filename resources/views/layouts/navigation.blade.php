@@ -15,6 +15,18 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if(Auth::user()->role !== 'admin')
+                        <x-nav-link :href="route('billing.index')" :active="request()->routeIs('billing.index')">
+                            Kuota Download ({{ Auth::user()->download_quota }})
+                        </x-nav-link>
+                    @endif
+
+                    @if(Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.index')">
+                            Verifikasi Pembayaran
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +82,18 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if(Auth::user()->role !== 'admin')
+                <x-responsive-nav-link :href="route('billing.index')" :active="request()->routeIs('billing.index')">
+                    Kuota Download ({{ Auth::user()->download_quota }})
+                </x-responsive-nav-link>
+            @endif
+
+            @if(Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.transactions.index')" :active="request()->routeIs('admin.transactions.index')">
+                    Verifikasi Pembayaran
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
